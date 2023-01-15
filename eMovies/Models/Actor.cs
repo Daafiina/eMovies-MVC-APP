@@ -6,7 +6,7 @@ namespace eMovies.Models
     public class Actor
     {
         [Key]
-        public int Id { get; set; }
+        public int Idd { get; set; }
 
         [Display(Name = "Profile Picture")]
         [Required(ErrorMessage = "Profile Picture required")]
