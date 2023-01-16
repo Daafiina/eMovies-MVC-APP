@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System;
+using eMovies.Data.Enums;
 
 namespace eMovies.Models
 {
@@ -29,6 +30,6 @@ namespace eMovies.Models
         //Producer
         public int ProducerId { get; set; }
         [ForeignKey("ProducerId")] //bon edhe pa e percaktu qito
-        public Producer Producer { get; set; }
+        /*public Producer Producer { get; set; }*/
     }
 }
