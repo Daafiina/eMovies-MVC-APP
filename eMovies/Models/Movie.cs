@@ -28,8 +28,8 @@ namespace eMovies.Models
         public Cinema Cinema { get; set; }
 
         //Producer
-        public int ProducerId { get; set; }
-        [ForeignKey("ProducerId")] //bon edhe pa e percaktu qito
+        /*public int ProducerId { get; set; }
+        [ForeignKey("ProducerId")] //bon edhe pa e percaktu qito*/
         /*public Producer Producer { get; set; }*/
     }
 }
