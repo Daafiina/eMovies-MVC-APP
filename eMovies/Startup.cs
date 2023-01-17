@@ -66,6 +66,9 @@ namespace eMovies
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            //Seed database
+            AppDbInitializer.Seed(app);
         }
     }
 }
