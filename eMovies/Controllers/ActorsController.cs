@@ -7,147 +7,223 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using eMovies.Data;
 using eMovies.Models;
+using eMovies.Data.Services;
 
 namespace eMovies.Controllers
 {
     public class ActorsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IActorsService _service;
 
-        public ActorsController(ApplicationDbContext context)
+        public ActorsController(IActorsService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: Actors
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Actors.ToListAsync());
+            var data = await _service.GetAllAsync();
+            return View(data);
         }
 
-        // GET: Actors/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var actor = await _context.Actors
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (actor == null)
-            {
-                return NotFound();
-            }
-
-            return View(actor);
-        }
-
-        // GET: Actors/Create
+        //Get: Actors//Create
         public IActionResult Create()
         {
             return View();
+
         }
 
-        // POST: Actors/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ProfilePictureURL,FullName,Bio")] Actor actor)
+        public async Task<IActionResult> Create([Bind("FullName,ProfilePictureURL,Bio")] Actor actor)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)//Shikon validimin a qendron sic eshte kerkuar nese jo kthen te njejten view po paraqiten errorat
             {
-                _context.Add(actor);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return View(actor);
+
             }
-            return View(actor);
+            await _service.AddAsync(actor);
+            return RedirectToAction(nameof(Index));
+
         }
 
-        // GET: Actors/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        //Get:Actors/Details/Id
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var actor = await _context.Actors.FindAsync(id);
-            if (actor == null)
-            {
-                return NotFound();
-            }
-            return View(actor);
+            var actorDetails = await _service.GetByIdAsync(id);
+            if (actorDetails == null) return View("NotFound");
+            return View(actorDetails);
         }
 
-        // POST: Actors/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //Get: Actors//Edit/1
+        public async Task<IActionResult> Edit(int id)
+        {
+            var actorDetails = await _service.GetByIdAsync(id);
+            if (actorDetails == null) return View("NotFound");
+            return View(actorDetails);
+
+        }
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ProfilePictureURL,FullName,Bio")] Actor actor)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FullName,ProfilePictureURL,Bio")] Actor actor)
         {
-            if (id != actor.Id)
+            if (!ModelState.IsValid)//Shikon validimin a qendron sic eshte kerkuar nese jo kthen te njejten view po paraqiten errorat
             {
-                return NotFound();
-            }
+                return View(actor);
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(actor);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ActorExists(actor.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
             }
-            return View(actor);
+            await _service.UpdateAsync(id, actor);
+            return RedirectToAction(nameof(Index));
+
         }
 
-        // GET: Actors/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        //Get: Actors//Delete/1
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var actor = await _context.Actors
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (actor == null)
-            {
-                return NotFound();
-            }
+            var actorDetails = await _service.GetByIdAsync(id);
+            if (actorDetails == null) return View("NotFound");
+            return View(actorDetails);
 
-            return View(actor);
         }
 
-        // POST: Actors/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var actor = await _context.Actors.FindAsync(id);
-            _context.Actors.Remove(actor);
-            await _context.SaveChangesAsync();
+            var actorDetails = await _service.GetByIdAsync(id);
+            if (actorDetails == null) return View("NotFound");
+
+            await _service.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ActorExists(int id)
-        {
-            return _context.Actors.Any(e => e.Id == id);
+            /*// GET: Actors/Details/5
+            public async Task<IActionResult> Details(int? id)
+            {
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                var actor = await _context.Actors
+                    .FirstOrDefaultAsync(m => m.Id == id);
+                if (actor == null)
+                {
+                    return NotFound();
+                }
+
+                return View(actor);
+            }
+
+            // GET: Actors/Create
+            public IActionResult Create()
+            {
+                return View();
+            }
+
+            // POST: Actors/Create
+            // To protect from overposting attacks, enable the specific properties you want to bind to.
+            // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> Create([Bind("Id,ProfilePictureURL,FullName,Bio")] Actor actor)
+            {
+                if (ModelState.IsValid)
+                {
+                    _context.Add(actor);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(actor);
+            }
+
+            // GET: Actors/Edit/5
+            public async Task<IActionResult> Edit(int? id)
+            {
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                var actor = await _context.Actors.FindAsync(id);
+                if (actor == null)
+                {
+                    return NotFound();
+                }
+                return View(actor);
+            }
+
+            // POST: Actors/Edit/5
+            // To protect from overposting attacks, enable the specific properties you want to bind to.
+            // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> Edit(int id, [Bind("Id,ProfilePictureURL,FullName,Bio")] Actor actor)
+            {
+                if (id != actor.Id)
+                {
+                    return NotFound();
+                }
+
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        _context.Update(actor);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!ActorExists(actor.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(actor);
+            }
+
+            // GET: Actors/Delete/5
+            public async Task<IActionResult> Delete(int? id)
+            {
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                var actor = await _context.Actors
+                    .FirstOrDefaultAsync(m => m.Id == id);
+                if (actor == null)
+                {
+                    return NotFound();
+                }
+
+                return View(actor);
+            }
+
+            // POST: Actors/Delete/5
+            [HttpPost, ActionName("Delete")]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> DeleteConfirmed(int id)
+            {
+                var actor = await _context.Actors.FindAsync(id);
+                _context.Actors.Remove(actor);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            private bool ActorExists(int id)
+            {
+                return _context.Actors.Any(e => e.Id == id);
+            }
         }
+
+    */
+
     }
 }

@@ -1,4 +1,5 @@
 using eMovies.Data;
+using eMovies.Data.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,6 +35,12 @@ namespace eMovies
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            //Services configuration
+
+            services.AddScoped<IActorsService,ActorsService>();
+
+           
             services.AddControllersWithViews();
         }
 
