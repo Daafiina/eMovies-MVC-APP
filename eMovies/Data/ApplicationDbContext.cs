@@ -26,7 +26,9 @@ namespace eMovies.Data
 
             base.OnModelCreating(modelBuilder);
         }
-        public DbSet<Movie> Movie { get; set; }
-        public DbSet<Actor> Actor { get; set; }
+        public DbSet<Movie> Movies { get; set; }
+        public DbSet<Actor> Actors { get; set; }
+
+        public DbSet<Actor> Cinemas { get; set; }
     }
 }

@@ -22,7 +22,7 @@ namespace eMovies.Controllers
         // GET: Actors
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Actor.ToListAsync());
+            return View(await _context.Actors.ToListAsync());
         }
 
         // GET: Actors/Details/5
@@ -33,7 +33,7 @@ namespace eMovies.Controllers
                 return NotFound();
             }
 
-            var actor = await _context.Actor
+            var actor = await _context.Actors
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (actor == null)
             {
@@ -73,7 +73,7 @@ namespace eMovies.Controllers
                 return NotFound();
             }
 
-            var actor = await _context.Actor.FindAsync(id);
+            var actor = await _context.Actors.FindAsync(id);
             if (actor == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace eMovies.Controllers
                 return NotFound();
             }
 
-            var actor = await _context.Actor
+            var actor = await _context.Actors
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (actor == null)
             {
@@ -139,15 +139,15 @@ namespace eMovies.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var actor = await _context.Actor.FindAsync(id);
-            _context.Actor.Remove(actor);
+            var actor = await _context.Actors.FindAsync(id);
+            _context.Actors.Remove(actor);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ActorExists(int id)
         {
-            return _context.Actor.Any(e => e.Id == id);
+            return _context.Actors.Any(e => e.Id == id);
         }
     }
 }
