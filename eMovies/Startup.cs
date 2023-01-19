@@ -40,6 +40,8 @@ namespace eMovies
 
             services.AddScoped<IActorsService,ActorsService>();
 
+            services.AddScoped<ICinemasService, CinemasService>();
+
            
             services.AddControllersWithViews();
         }
