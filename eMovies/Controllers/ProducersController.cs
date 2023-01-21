@@ -25,6 +25,31 @@ namespace eMovies.Controllers
             var allProducers = await _service.GetAllAsync();
             return View(allProducers);
         }
+
+
+        //Get: producers/details/1
+        public async Task<IActionResult> Details(int id)
+        {
+            var producerDetails = await _service.GetByIdAsync(id);
+            if (producerDetails == null) return View("NotFound");
+
+            return View(producerDetails);
+        }
+
+        //Get: producers/create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([Bind("ProfilePictureURL,fullName,Bio")]Producer producer)
+        {
+            if (!ModelState.IsValid) return View(producer);
+
+            await _service.AddAsync(producer);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
 
