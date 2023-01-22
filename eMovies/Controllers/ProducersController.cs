@@ -43,7 +43,7 @@ namespace eMovies.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("ProfilePictureURL,fullName,Bio")]Producer producer)
+        public async Task<IActionResult> Create([Bind("ProfilePictureURL,FullName,Bio")]Producer producer)
         {
             if (!ModelState.IsValid) return View(producer);
 
@@ -56,11 +56,11 @@ namespace eMovies.Controllers
         {
             var producerDetails = await _service.GetByIdAsync(id);
             if (producerDetails == null) return View("Not Found");
-            return View();
+            return View(producerDetails);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ProfilePictureURL,fullName,Bio")] Producer producer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ProfilePictureURL,FullName,Bio")] Producer producer)
         {
             if (!ModelState.IsValid) return View(producer);
 
@@ -77,7 +77,7 @@ namespace eMovies.Controllers
         {
             var producerDetails = await _service.GetByIdAsync(id);
             if (producerDetails == null) return View("Not Found");
-            return View();
+            return View(producerDetails);
         }
 
         [HttpPost, ActionName("Delete")]

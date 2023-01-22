@@ -8,13 +8,13 @@ namespace eMovies.Models
     {
         [Key]
         public int Id { get; set; }
+
         [Display(Name = "Profile Picture")]
-        [Required (ErrorMessage = "Profile Picture is Required")]
-        [StringLength(50, MinimumLength =3, ErrorMessage = "Name must be between 3 and 50 chars")]
+        [Required(ErrorMessage = "Profile Picture is required")]
         public string ProfilePictureURL { get; set; }
 
         [Display(Name = "Full Name")]
-        [Required(ErrorMessage = "Full Name is Required")]
+
         public string FullName { get; set; }
 
         [Display(Name = "Biography")]
