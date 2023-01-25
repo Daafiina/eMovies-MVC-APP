@@ -44,6 +44,8 @@ namespace eMovies
 
            services.AddScoped<IProducersService, ProducersService>();
 
+            services.AddScoped<IMoviesService, MoviesService>();
+
             services.AddControllersWithViews();
         }
 

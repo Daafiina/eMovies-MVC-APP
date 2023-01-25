@@ -7,25 +7,35 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using eMovies.Data;
 using eMovies.Models;
+using eMovies.Data.Services;
 
 namespace eMovies.Controllers
 {
     public class MoviesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IMoviesService _service;
 
-        public MoviesController(ApplicationDbContext context)
+        public MoviesController(IMoviesService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: Movies
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Movies.Include(n=>n.Cinema).ToListAsync());
+            var allMovies = await _service.GetAllAsync(n => n.Cinema);
+            return View(allMovies);
         }
 
-        // GET: Movies/Details/5
+        //GET: Movies/Details/1
+        public async Task<IActionResult> Details (int id)
+        {
+            var movieDetail = await _service.GetMovieByIdAsync(id);
+            return View(movieDetail);
+        }
+    }
+}
+       /* // GET: Movies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -151,3 +161,4 @@ namespace eMovies.Controllers
         }
     }
 }
+*/
