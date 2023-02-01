@@ -21,8 +21,15 @@ namespace eMovies.Data
                 am.ActorId,
                 am.MovieId
             });
-            modelBuilder.Entity<Actor_Movie>().HasOne(m => m.Movie).WithMany(am => am.Actors_Movies).HasForeignKey(m => m.MovieId);
-            modelBuilder.Entity<Actor_Movie>().HasOne(a => a.Actor).WithMany(am => am.Actors_Movies).HasForeignKey(a => a.ActorId);
+            modelBuilder.Entity<Actor_Movie>().HasOne(m => m.Movie)
+                .WithMany(am => am.Actors_Movies)
+                .HasForeignKey(m => m.MovieId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<Actor_Movie>().HasOne(a => a.Actor)
+                .WithMany(am => am.Actors_Movies)
+                .HasForeignKey(a => a.ActorId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -33,5 +40,10 @@ namespace eMovies.Data
         public DbSet<Producer> Producers { get; set; }
 
         public DbSet<Actor_Movie> Actors_Movies { get; set; }
+
+        //Orders related tables
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set;}
     }
 }
